@@ -1,0 +1,38 @@
+<project name="FCTools" default="modify" basedir=".">
+ 
+<property name="src"         value="${basedir}/src"/>
+<property name="build"  value="${basedir}/build"/>
+<path id="classpath.default">
+	<fileset dir="lib">
+	        <include name="**/*.jar"/>
+	      </fileset>
+</path>
+
+<path id="classpath.run">
+	<pathelement path="${build}" />
+	<fileset dir="lib">
+       <include name="**/*.jar"/>
+     </fileset>
+		
+</path>
+ <target name="clean" description="cleans build folder">
+  <delete dir="${build}"/>
+</target>
+<target name="prepare">
+	<mkdir dir="${build}"/>
+	<copy file="${src}/fctools.properties" todir="${build}"/>
+	<copy file="${src}/testPIDs.txt" todir="${build}"/>
+</target>
+<target name="compile" depends="clean,prepare" description="compile all files in src folder" >
+	  <javac srcdir="${src}" destdir="${build}" source="1.5"  debug="true" debuglevel="lines,vars,source" >
+	  	<classpath refid="classpath.default" />
+	  </javac>
+</target>
+	
+<target name="modify" depends="compile" description="excutes modify and adds itemID tags">
+	<java classname="RunBatch" dir="${build}">
+		<classpath refid="classpath.run" />
+	</java>
+</target>	
+
+</project>
