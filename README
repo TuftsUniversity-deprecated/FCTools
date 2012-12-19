@@ -1,0 +1,5 @@
+Some Rudimentary tools for purging a piece of metadata from a particular datastream and adding oaipmh data to RELS-EXT.
+
+Updates 12/18/2012
+  * Updated to work with Fedora 3.5 from Fedora 3.1
+  * Added ability to purge bibliographic Citation from DCA-META
