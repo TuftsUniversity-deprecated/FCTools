@@ -67,7 +67,7 @@ public class RunBatch {
         		else if (ACTION.equals("oaipmh"))
         		{
         			m.setObjectId(line);
-	-        		m.addItemId();
+          		m.addItemId();
         		}
         		else
         		{
