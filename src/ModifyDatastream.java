@@ -66,10 +66,7 @@ public class ModifyDatastream {
 	public static final String FEDORA_PASSWORD = bundle.getString("fedora.password");
 	public static final String FEDORA_SPROTOCOL = bundle.getString("fedora.sprotocol");
 	public static final String FEDORA_TRUSTSTORE_PASSWORD= bundle.getString("fedora.truststore.password");
- 	public static final String FEDORA_TRUSTSTORE = "truststore";
-	
-//	public static final String  TEST_ID = "test:oaiprovider-object-item-c.d_a.d";
-//	public static final String  TEST_ID = "test:oaiprovider-object-item-c.d_a.n";
+ 	public static final String FEDORA_TRUSTSTORE = "truststore";	
  	public static final String  TEST_ID = "test:oaiprovider-object-identify";
 	public static final String FEDORA_URL_PATH = "/fedora/";
 	public static final String XML_MIME_TYPE ="text/xml";
@@ -157,42 +154,23 @@ public class ModifyDatastream {
 		} catch(NullPointerException ex) {
 			System.out.println("datastream is not present ");
 			return;
-		}		
-		//String OAIItemId = getOAIItemID(datastream) ;
-		//if(OAIItemId== null) {
-		//	addOAIItemID(datastream);
-		//} else {
-		//	out.println(objectId +", "+ OAIItemId+" : OAI ItemID already present. skipping...");
-		//}
+		}				
 	}
 
     private void removeCitationFieldFromDatastream(String datastream, String pid)
     {
     	try
     	{
-    		//ByteArrayInputStream input = new ByteArrayInputStream(yourString.getBytes(perhapsEncoding));
-    		String trimmed_string = datastream;
-//String trimmed_string = "<dca_dc:dc xmlns:dca_dc=\"http://nils.lib.tufts.edu/dca_dc/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\" xmlns:dcatech=\"http://nils.lib.tufts.edu/dcatech/\" xmlns:dcadesc=\"http://nils.lib.tufts.edu/dcadesc/\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.fedora.info/definitions/\">" +
-//				        "<dc:title>This I Believe</dc:title><dc:bibliographicCitation>Haynes, George Edmund. &quot;This I Believe.&quot; 1954-01-15. Tufts University. Digital Collections and Archives. Medford, MA. http://hdl.handle.net/10427/75869</dc:bibliographicCitation>" +				        
-//			         	"</dca_dc:dc>";
-	    	Document doc = builder.parse(new StringBufferInputStream(trimmed_string));
+	    	Document doc = builder.parse(new StringBufferInputStream(datastream));
 	    	System.out.println(doc.toString());
 		    XPathExpression expr   = xpath.compile("//dc:bibliographicCitation");
-		   // System.out.println("expression : " + expr.toString());
-	        Node nodeToRemove = (Node) expr.evaluate(doc, XPathConstants.NODE);
-	        
-	        //System.out.println("node to remove" + nodeToRemove.getLength());
+	        Node nodeToRemove = (Node) expr.evaluate(doc, XPathConstants.NODE);	        
 	        nodeToRemove.getParentNode().removeChild(nodeToRemove);	
 		    StringWriter sw = new StringWriter();
 	        StreamResult sr  = new StreamResult(sw);
 	        DOMSource source = new DOMSource(doc);
-	        trans.transform(source, sr);
-	      //  TransformerFactory tf = TransformerFactory.newInstance();
-	       // Transformer t = tf.newTransformer();
-	     //   t.transform(source, sr);
-	        String xmlString = sw.toString();
-	      //  System.out.println("CLEANED");
-	        System.out.println(xmlString);
+	        trans.transform(source, sr);	      
+	        String xmlString = sw.toString();	      	        
 	        fc = new FedoraClient(FEDORA_SPROTOCOL+"://"+FEDORA_ADDRESS+":"+FEDORA_SPORT+FEDORA_URL_PATH,FEDORA_USERNAME,FEDORA_PASSWORD);
     	    fc.getAPIM().modifyDatastreamByValue(pid,"DCA-META",null,"DCA Descriptive Metadata","text/xml",null,xmlString.getBytes(),null,null,"purging bib citation",true);
      	    fc = null;
@@ -204,12 +182,6 @@ public class ModifyDatastream {
 	    	e.printStackTrace();
 	    	System.out.println("MODIFY FAILED FOR PID : " + pid);
 	    }
-    //    fc = new FedoraClient(FEDORA_SPROTOCOL+"://"+FEDORA_ADDRESS+":"+FEDORA_SPORT+FEDORA_URL_PATH,FEDORA_USERNAME,FEDORA_PASSWORD);
-    //    fc.getAPIM().modifyDatastreamByValue(objectId,RELS_DS,null,RELS_LABEL,XML_MIME_TYPE,NS_RELS,xmlString.getBytes(),null,null,COMMENT,true);
-     //   fc = null;
-      //  System.gc();
-        // out.println(objectId+ ", Added  OAI ItemID.");
-
 	
     }
 	/** 
